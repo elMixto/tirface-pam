@@ -1,0 +1,26 @@
+post_install() {
+  systemctl daemon-reload
+
+  echo ""
+  echo "================================================================="
+  echo " Tirface has been installed"
+  echo "================================================================="
+  echo "1. Start the daemon with systemd:"
+  echo "    sudo systemctl enable --now tirface-pam.service"
+  echo "2. Enroll your face with tirface-pam-cli:"
+  echo "    sudo tirface-pam-cli enroll"
+  echo "3. To enable face authentication for sudo, edit /etc/pam.d/sudo and add:"
+  echo "    auth      sufficient pam_tirface_pam.so"
+  echo "================================================================="
+  echo ""
+}
+
+post_upgrade() {
+  systemctl daemon-reload
+  systemctl try-restart tirface-pam.service
+}
+
+pre_remove() {
+  systemctl disable --now tirface-pam.service
+  systemctl stop tirface-pam.service || true
+}

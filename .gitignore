@@ -1,0 +1,38 @@
+# Rust / Cargo
+/target/
+**/*.rs.bk
+
+# Arch Linux Makepkg / Build Artifacts
+/pkg/
+/src/cargo-home/
+/test_cargo
+*.pkg.tar
+*.pkg.tar.*
+*.src.tar.gz
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE / OS Files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Project Specific
+/debug_frames/
+# Images
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.pjg
+
+# Person data directories
+tests/data/identities/person_*

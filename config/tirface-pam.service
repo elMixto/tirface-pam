@@ -1,0 +1,22 @@
+[Unit]
+Description=Tirface PAM Face Authentication Daemon
+After=multi-user.target
+
+[Service]
+Type=simple
+# The daemon must run as root for absolute access to V4L2 hardware and master keys
+ExecStart=/usr/bin/tirface-pam-daemon
+Restart=always
+RestartSec=2
+
+# --- Security Hardening ---
+ProtectSystem=strict
+# Necessary read and write paths
+ReadWritePaths=/var/lib/tirface-pam /run /etc/tirface-pam
+# Does not need to see other user /tmp
+PrivateTmp=true
+# Strict capabilities: only what is necessary to handle sockets and read /dev/video
+CapabilityBoundingSet=CAP_SYS_ADMIN CAP_CHOWN CAP_DAC_OVERRIDE
+
+[Install]
+WantedBy=multi-user.target
