@@ -1,11 +1,13 @@
 pub mod arcface;
 pub mod mobilefacenet;
+#[cfg(feature = "openvino")]
 pub mod openvino_rec;
 pub mod rustface;
 pub mod traits;
 
 use crate::config::{Backend, ModelsConfig, RecognizerModel};
 use crate::error::FacePamError;
+#[cfg(feature = "openvino")]
 use openvino::DeviceType;
 pub use traits::{BoundingBox, FaceDetector, FaceRecognizer, Runtime};
 
@@ -15,6 +17,7 @@ pub fn load_recognizer(
     let recognizer_path = config.get_recognizer_path();
 
     match config.get_recognizer_model() {
+        #[cfg(feature = "openvino")]
         RecognizerModel::MobileFaceNet(Backend::Openvino(device_model)) => {
             let (device, runtime) = match device_model {
                 Runtime::Cpu => (DeviceType::CPU, Runtime::Cpu),
@@ -62,6 +65,7 @@ pub fn load_recognizer(
             let rec = mobilefacenet::MobileFaceNet::new(&recognizer_path)?;
             Ok(Box::new(rec))
         }
+        #[cfg(feature = "openvino")]
         RecognizerModel::ArcFace(Backend::Openvino(device_model)) => {
             let (device, runtime) = match device_model {
                 Runtime::Cpu => (DeviceType::CPU, Runtime::Cpu),
@@ -108,6 +112,10 @@ pub fn load_recognizer(
         RecognizerModel::ArcFace(Backend::Ort) => {
             let rec = arcface::ArcFace::new(&recognizer_path)?;
             Ok(Box::new(rec))
+        }
+        #[cfg(not(feature = "openvino"))]
+        RecognizerModel::MobileFaceNet(Backend::Openvino(_)) | RecognizerModel::ArcFace(Backend::Openvino(_)) => {
+            Err(FacePamError::Model("OpenVINO support not compiled in".to_string()))
         }
     }
 }

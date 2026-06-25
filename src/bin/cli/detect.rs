@@ -8,7 +8,9 @@ pub fn run_detect(config: &Config) -> std::io::Result<()> {
     log!("\n🔍 Starting Hardware and Artificial Intelligence Self-Diagnosis...\n");
 
     log!("=== 1. Physical Silicon Audit ===");
+    #[allow(unused_mut)]
     let mut available_devices: Vec<String> = Vec::new();
+    #[cfg(feature = "openvino")]
     match openvino::Core::new() {
         Ok(core) => {
             log!("✅ Intel OpenVINO library detected and operational.");
@@ -31,6 +33,8 @@ pub fn run_detect(config: &Config) -> std::io::Result<()> {
             );
         }
     }
+    #[cfg(not(feature = "openvino"))]
+    log!("ℹ️ Intel OpenVINO library disabled or not compiled.");
 
     log!("\n=== 1.5. Camera and Supported Formats Audit ===");
     let nodes = v4l::context::enum_devices();

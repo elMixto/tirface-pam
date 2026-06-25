@@ -136,38 +136,45 @@ fn run_e2e_test_for_model(models_config: &ModelsConfig) {
 fn test_e2e_enroll_and_inference_with_dummy_camera_all_models_and_runtimes() {
     let detector_path = "src/models/rustface/seeta_fd_frontal_v1.0.bin";
 
-    let test_configs = vec![
+    #[allow(unused_mut)]
+    let mut test_configs = vec![
         // 1. MobileFaceNet con ONNX Runtime (CPU)
         ModelsConfig {
             detector_path: detector_path.to_string(),
             recognizer_model: "mobilefacenet".to_string(), recognizer_backend: "ort".to_string(), recognizer_device: "CPU".to_string(),
-        },
-        // 2. MobileFaceNet con OpenVINO (CPU)
-        ModelsConfig {
-            detector_path: detector_path.to_string(),
-            recognizer_model: "mobilefacenet".to_string(), recognizer_backend: "openvino".to_string(), recognizer_device: "CPU".to_string(),
         },
         // 3. ArcFace con ONNX Runtime (CPU)
         ModelsConfig {
             detector_path: detector_path.to_string(),
             recognizer_model: "arcface".to_string(), recognizer_backend: "ort".to_string(), recognizer_device: "CPU".to_string(),
         },
-        // 4. ArcFace con OpenVINO (CPU)
-        ModelsConfig {
-            detector_path: detector_path.to_string(),
-            recognizer_model: "arcface".to_string(), recognizer_backend: "openvino".to_string(), recognizer_device: "CPU".to_string(),
-        },
-        // 5. ArcFace con OpenVINO (GPU - con fallback a CPU si no hay GPU)
-        ModelsConfig {
-            detector_path: detector_path.to_string(),
-            recognizer_model: "arcface".to_string(), recognizer_backend: "openvino".to_string(), recognizer_device: "GPU".to_string(),
-        },
-        // 6. ArcFace con OpenVINO (NPU - con fallback a CPU si no hay NPU)
-        ModelsConfig {
-            detector_path: detector_path.to_string(),
-            recognizer_model: "arcface".to_string(), recognizer_backend: "openvino".to_string(), recognizer_device: "NPU".to_string(),
-        },
     ];
+
+    #[cfg(feature = "openvino")]
+    {
+        test_configs.extend(vec![
+            // 2. MobileFaceNet con OpenVINO (CPU)
+            ModelsConfig {
+                detector_path: detector_path.to_string(),
+                recognizer_model: "mobilefacenet".to_string(), recognizer_backend: "openvino".to_string(), recognizer_device: "CPU".to_string(),
+            },
+            // 4. ArcFace con OpenVINO (CPU)
+            ModelsConfig {
+                detector_path: detector_path.to_string(),
+                recognizer_model: "arcface".to_string(), recognizer_backend: "openvino".to_string(), recognizer_device: "CPU".to_string(),
+            },
+            // 5. ArcFace con OpenVINO (GPU - con fallback a CPU si no hay GPU)
+            ModelsConfig {
+                detector_path: detector_path.to_string(),
+                recognizer_model: "arcface".to_string(), recognizer_backend: "openvino".to_string(), recognizer_device: "GPU".to_string(),
+            },
+            // 6. ArcFace con OpenVINO (NPU - con fallback a CPU si no hay NPU)
+            ModelsConfig {
+                detector_path: detector_path.to_string(),
+                recognizer_model: "arcface".to_string(), recognizer_backend: "openvino".to_string(), recognizer_device: "NPU".to_string(),
+            },
+        ]);
+    }
 
     for config in test_configs {
         run_e2e_test_for_model(&config);

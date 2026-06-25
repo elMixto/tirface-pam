@@ -1,3 +1,5 @@
+#![cfg(feature = "openvino")]
+
 use crate::error::FacePamError;
 use crate::models::traits::{BoundingBox, FaceRecognizer, Runtime};
 use image::{GrayImage, imageops::FilterType};

@@ -1,3 +1,5 @@
+#![cfg(feature = "openvino")]
+
 use image::ImageReader;
 use openvino::DeviceType;
 use pam_tirface_pam::models::{
