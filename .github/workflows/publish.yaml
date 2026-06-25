@@ -22,7 +22,7 @@ jobs:
       - name: Configurar entorno y usuario no-root
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm v4l-utils rust
+          pacman -S --noconfirm v4l-utils rust clang
           useradd -m builduser
           echo "builduser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
           chown -R builduser:builduser .
