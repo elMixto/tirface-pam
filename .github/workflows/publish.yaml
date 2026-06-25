@@ -1,0 +1,37 @@
+name: Compile and package
+
+on:
+  push:
+    tags:
+      - 'v*' # Se activa con v1.0.0, v2.1.5, etc.
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: archlinux:base-devel
+    permissions:
+      contents: write # Permiso explícito necesario para crear la Release
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar entorno y usuario no-root
+        run: |
+          pacman -Syu --noconfirm
+          useradd -m builduser
+          echo "builduser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+          chown -R builduser:builduser .
+
+      - name: Ejecutar makepkg
+        run: su builduser -c "makepkg -s --noconfirm"
+
+      - name: Publicar en GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./*.pkg.tar.zst
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,10 +1,10 @@
 # Maintainer: mixto
 pkgname=tirface-pam
-pkgver=0.1.0
+pkgver=1.0.0
 pkgrel=1
-pkgdesc="Low effort IR Facial authentication for Linux"
+pkgdesc="A fast and pythonless face authentication module for the IR camera on some Thinkpads, that runs on CPU and NPUs with OpenVINO with a simple installation."
 arch=('x86_64')
-url=""
+url="https://github.com/elMixto/tirface-pam"
 license=('MIT')
 depends=('v4l-utils' 'pam' 'openvino' 'sqlite')
 makedepends=('cargo')
