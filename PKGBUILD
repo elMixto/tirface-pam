@@ -7,7 +7,7 @@ arch=('x86_64')
 url="https://github.com/elMixto/tirface-pam"
 license=('MIT')
 depends=('v4l-utils' 'pam' 'sqlite')
-optdepend=('openvino')
+optdepends=('openvino: for GPU/NPU hardware acceleration')
 makedepends=('cargo')
 install=install.install
 
