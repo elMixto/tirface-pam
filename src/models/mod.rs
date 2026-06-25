@@ -32,11 +32,12 @@ pub fn load_recognizer(
             ) {
                 Ok(rec) => Ok(Box::new(rec)),
                 Err(e) => {
+                    log::warn!(
+                        "OpenVINO failed on {:?}: {}. Trying OpenVINO fallback to CPU...",
+                        device_model,
+                        e
+                    );
                     if device_model != Runtime::Cpu {
-                        log::warn!(
-                            "OpenVINO failed on {:?}, trying fallback to CPU...",
-                            device_model
-                        );
                         if let Ok(rec) = openvino_rec::OpenVINORecognizer::new(
                             &recognizer_path,
                             DeviceType::CPU,
@@ -49,7 +50,11 @@ pub fn load_recognizer(
                             return Ok(Box::new(rec));
                         }
                     }
-                    Err(e)
+                    log::warn!(
+                        "OpenVINO fallback to CPU failed (perhaps OpenVINO is not installed). Falling back to ONNX Runtime (CPU)..."
+                    );
+                    let rec = mobilefacenet::MobileFaceNet::new(&recognizer_path)?;
+                    Ok(Box::new(rec))
                 }
             }
         }
@@ -74,11 +79,12 @@ pub fn load_recognizer(
             ) {
                 Ok(rec) => Ok(Box::new(rec)),
                 Err(e) => {
+                    log::warn!(
+                        "OpenVINO failed on {:?}: {}. Trying OpenVINO fallback to CPU...",
+                        device_model,
+                        e
+                    );
                     if device_model != Runtime::Cpu {
-                        log::warn!(
-                            "OpenVINO failed on {:?}, trying fallback to CPU...",
-                            device_model
-                        );
                         if let Ok(rec) = openvino_rec::OpenVINORecognizer::new(
                             &recognizer_path,
                             DeviceType::CPU,
@@ -91,7 +97,11 @@ pub fn load_recognizer(
                             return Ok(Box::new(rec));
                         }
                     }
-                    Err(e)
+                    log::warn!(
+                        "OpenVINO fallback to CPU failed (perhaps OpenVINO is not installed). Falling back to ONNX Runtime (CPU)..."
+                    );
+                    let rec = arcface::ArcFace::new(&recognizer_path)?;
+                    Ok(Box::new(rec))
                 }
             }
         }

@@ -6,7 +6,8 @@ pkgdesc="A fast and pythonless face authentication module for the IR camera on s
 arch=('x86_64')
 url="https://github.com/elMixto/tirface-pam"
 license=('MIT')
-depends=('v4l-utils' 'pam' 'openvino' 'sqlite')
+depends=('v4l-utils' 'pam' 'sqlite')
+optdepend=('openvino')
 makedepends=('cargo')
 install=install.install
 

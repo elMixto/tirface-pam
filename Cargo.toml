@@ -38,7 +38,7 @@ log = "0.4.30"
 env_logger = "0.11.10"
 thiserror = "2.0.18"
 clap = { version = "4.6.1", features = ["derive"] }
-openvino = "0.11.0"
+openvino = { version = "0.11.0", features = ["runtime-linking"] }
 zbus = "5.16.0"
 rusqlite = { version = "0.40.1" }
 uuid = { version = "1.8.0", features = ["v4"] }
