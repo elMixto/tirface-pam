@@ -16,6 +16,11 @@ jobs:
       contents: write # Permiso explícito necesario para crear la Release
 
     steps:
+      - name: Instalar git para checkout con LFS
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm git git-lfs
+
       - name: Checkout del repositorio
         uses: actions/checkout@v4
         with:
@@ -23,7 +28,6 @@ jobs:
 
       - name: Configurar entorno y usuario no-root
         run: |
-          pacman -Syu --noconfirm
           pacman -S --noconfirm v4l-utils rust clang
           useradd -m builduser
           echo "builduser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
