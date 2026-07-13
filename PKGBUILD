@@ -9,6 +9,7 @@ license=('MIT')
 depends=('v4l-utils' 'pam' 'sqlite')
 optdepends=('openvino: for GPU/NPU hardware acceleration')
 makedepends=('cargo')
+options=(!debug)
 install=install.install
 
 prepare() {
