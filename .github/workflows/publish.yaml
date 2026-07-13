@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout del repositorio
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - name: Configurar entorno y usuario no-root
         run: |
